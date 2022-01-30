@@ -9,7 +9,8 @@ import {
   UniversalCamera,
   PointerEventTypes,
   PointerInfo,
-  EventState
+  EventState,
+  Mesh
 } from "@babylonjs/core";
 
 function createScene(scene: Scene) {
@@ -23,29 +24,34 @@ function createScene(scene: Scene) {
 }
 
 
-function handlePointer(pointerInfo: PointerInfo, state: EventState) {
-  switch (pointerInfo.type) {
-    case PointerEventTypes.POINTERDOWN:
-      console.log("POINTER DOWN");
-      break;
-    case PointerEventTypes.POINTERUP:
-      console.log("POINTER UP");
-      break;
-    case PointerEventTypes.POINTERMOVE:
-      console.log("POINTER MOVE");
-      break;
-    case PointerEventTypes.POINTERWHEEL:
-      console.log("POINTER WHEEL");
-      break;
-    case PointerEventTypes.POINTERPICK:
-      console.log("POINTER PICK");
-      break;
-    case PointerEventTypes.POINTERTAP:
-      console.log("POINTER TAP");
-      break;
-    case PointerEventTypes.POINTERDOUBLETAP:
-      console.log("POINTER DOUBLE-TAP");
-      break;
+function handlePointer(scene: Scene) {
+  return (pointerInfo: PointerInfo, state: EventState) => {
+    switch (pointerInfo.type) {
+      case PointerEventTypes.POINTERDOWN:
+        break;
+      case PointerEventTypes.POINTERUP:
+        break;
+      case PointerEventTypes.POINTERMOVE:
+        console.log(pointerInfo);
+        if (pointerInfo.pickInfo?.ray) {
+
+          var hitInfo = scene.pickWithRay(pointerInfo.pickInfo.ray);
+          if (hitInfo?.hit && hitInfo?.pickedPoint) {
+            var sphere: Mesh = MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene);
+            sphere.position = hitInfo.pickedPoint;
+            sphere.isPickable = false;
+          }
+        }
+        break;
+      case PointerEventTypes.POINTERWHEEL:
+        break;
+      case PointerEventTypes.POINTERPICK:
+        break;
+      case PointerEventTypes.POINTERTAP:
+        break;
+      case PointerEventTypes.POINTERDOUBLETAP:
+        break;
+    }
   }
 };
 
@@ -60,7 +66,7 @@ export function handleScene({ canvas, scene }: { canvas: HTMLCanvasElement; scen
 
   createScene(scene);
 
-  scene.onPointerObservable.add(handlePointer);
+  scene.onPointerObservable.add(handlePointer(scene));
 
   scene.getEngine().runRenderLoop(() => {
     if (scene) {
