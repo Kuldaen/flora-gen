@@ -1,10 +1,10 @@
 import { Component } from "react";
-import { Scene, Engine } from "react-babylonjs";
-import { handleScene } from "../scene/scene";
+import { Scene, Engine, SceneEventArgs } from "react-babylonjs";
+import { createFloraApp } from "../scene/scene";
 
 class SceneViewer extends Component {
-  onSceneMount( e : { canvas: any; scene: any }): void {
-    handleScene(e);
+  onSceneMount(e: SceneEventArgs): void {
+    createFloraApp(e);
   }
 
   render() {

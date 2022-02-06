@@ -3,74 +3,72 @@ import {
   Scene,
   Color3,
   Vector3,
-  HemisphericLight,
   MeshBuilder,
   StandardMaterial,
-  UniversalCamera,
-  PointerEventTypes,
-  PointerInfo,
-  EventState,
-  Mesh
+  ArcRotateCamera,
+  DirectionalLight,
 } from "@babylonjs/core";
+import { SceneEventArgs } from "react-babylonjs";
+import Path, { smooth_path } from './geometry/path'
 
-function createScene(scene: Scene) {
+class FloraApp {
+  private _scene: Scene;
+  private _canvas: HTMLCanvasElement;
+  private _camera: ArcRotateCamera;
 
-  var ground = MeshBuilder.CreateGround("ground", { width: 10, height: 10 }, scene)
-  const groundMat = new StandardMaterial("groundMat", scene);
-  groundMat.diffuseColor = new Color3(0, 1, 0);
-  ground.material = groundMat;
+  constructor(canvas: HTMLCanvasElement, scene: Scene) {
+    this._canvas = canvas;
+    this._scene = scene;
 
-  new HemisphericLight("light", Vector3.Up(), scene);
-}
+    this._camera = this.createCamera();
+    this.createScene();
 
-
-function handlePointer(scene: Scene) {
-  return (pointerInfo: PointerInfo, state: EventState) => {
-    switch (pointerInfo.type) {
-      case PointerEventTypes.POINTERDOWN:
-        break;
-      case PointerEventTypes.POINTERUP:
-        break;
-      case PointerEventTypes.POINTERMOVE:
-        console.log(pointerInfo);
-        if (pointerInfo.pickInfo?.ray) {
-
-          var hitInfo = scene.pickWithRay(pointerInfo.pickInfo.ray);
-          if (hitInfo?.hit && hitInfo?.pickedPoint) {
-            var sphere: Mesh = MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene);
-            sphere.position = hitInfo.pickedPoint;
-            sphere.isPickable = false;
-          }
-        }
-        break;
-      case PointerEventTypes.POINTERWHEEL:
-        break;
-      case PointerEventTypes.POINTERPICK:
-        break;
-      case PointerEventTypes.POINTERTAP:
-        break;
-      case PointerEventTypes.POINTERDOUBLETAP:
-        break;
-    }
+    this.run()
   }
+
+  private run() {
+    this._scene.getEngine().runRenderLoop(() => {
+      if (this._scene) {
+        this._scene.render();
+      }
+    });
+  }
+
+  private createCamera() {
+    const camera = new ArcRotateCamera(
+      "Camera", 0, Math.PI / 4, 50, Vector3.Zero(),
+      this._scene
+    );
+    camera.attachControl(this._canvas, true)
+    return camera;
+  }
+
+  private createScene() {
+    const groundMat = new StandardMaterial("groundMat", this._scene);
+    groundMat.diffuseColor = new Color3(0, 0.1, 0);
+    groundMat.specularColor = new Color3(0.2, 0.2, 0.2);
+
+    const ground = MeshBuilder.CreateGround("ground", { width: 100, height: 100 }, this._scene)
+    ground.material = groundMat;
+
+    const light = new DirectionalLight("light", new Vector3(-0.2, -1.0, -0.2), this._scene);
+    light.intensity = 2;
+    const path = new Path(new Vector3(0, 0, 0), new Vector3(0, 2, 0), new Vector3(0, 3, -6), new Vector3(3, 5, 5), new Vector3(-4, 8. - 0.5),
+    );
+    const smoothed = smooth_path(path);
+    const tube = MeshBuilder.CreateTube("tube", { path: smoothed, radius: 0.25 }, this._scene);
+    const tubeMat = new StandardMaterial("tubeMat", this._scene);
+    tubeMat.ambientColor = new Color3(0.85, 0.85, 0.5);
+    tube.material = tubeMat;
+
+    this._scene.ambientColor = new Color3(0.5, 0.5, 0.5);
+
+
+  }
+
 };
 
-export function handleScene({ canvas, scene }: { canvas: HTMLCanvasElement; scene: Scene; }) {
-  var camera = new UniversalCamera(
-    "Camera",
-    new Vector3(5, 5, 10),
-    scene
-  );
-  camera.setTarget(Vector3.Zero())
-  // camera.attachControl(canvas);
-
-  createScene(scene);
-
-  scene.onPointerObservable.add(handlePointer(scene));
-
-  scene.getEngine().runRenderLoop(() => {
-    if (scene) {
-      scene.render();
-    }
-  });
+export function createFloraApp({ canvas, scene }: SceneEventArgs) {
+  return new FloraApp(canvas, scene);
 }
+
