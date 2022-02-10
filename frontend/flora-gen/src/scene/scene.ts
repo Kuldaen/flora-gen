@@ -9,16 +9,20 @@ import {
   DirectionalLight,
 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
-import Path, { smooth_path } from './geometry/path'
+import { createPlant, Plant } from "./plants/plants";
+import { buildPlantMesh } from "./plantBuilder";
 
 class FloraApp {
   private _scene: Scene;
   private _canvas: HTMLCanvasElement;
   private _camera: ArcRotateCamera;
+  private _plant: Plant;
 
   constructor(canvas: HTMLCanvasElement, scene: Scene) {
     this._canvas = canvas;
     this._scene = scene;
+
+    this._plant = createPlant();
 
     this._camera = this.createCamera();
     this.createScene();
@@ -36,9 +40,18 @@ class FloraApp {
 
   private createCamera() {
     const camera = new ArcRotateCamera(
-      "Camera", 0, Math.PI / 4, 50, Vector3.Zero(),
+      "Camera", 0, Math.PI / 4, 1, Vector3.Zero(),
       this._scene
-    );
+    )
+    camera.panningSensibility = 0;
+    camera.allowUpsideDown = false;
+    camera.lowerRadiusLimit = 0.1;
+    camera.upperRadiusLimit = 50;
+    camera.pinchDeltaPercentage = 0.01;
+    camera.wheelDeltaPercentage = 0.01;
+    camera.useNaturalPinchZoom = true;
+    camera.maxZ = 100;
+    camera.minZ = 0.001;
     camera.attachControl(this._canvas, true)
     return camera;
   }
@@ -53,16 +66,10 @@ class FloraApp {
 
     const light = new DirectionalLight("light", new Vector3(-0.2, -1.0, -0.2), this._scene);
     light.intensity = 2;
-    const path = new Path(new Vector3(0, 0, 0), new Vector3(0, 2, 0), new Vector3(0, 3, -6), new Vector3(3, 5, 5), new Vector3(-4, 8. - 0.5),
-    );
-    const smoothed = smooth_path(path);
-    const tube = MeshBuilder.CreateTube("tube", { path: smoothed, radius: 0.25 }, this._scene);
-    const tubeMat = new StandardMaterial("tubeMat", this._scene);
-    tubeMat.ambientColor = new Color3(0.85, 0.85, 0.5);
-    tube.material = tubeMat;
 
     this._scene.ambientColor = new Color3(0.5, 0.5, 0.5);
 
+    buildPlantMesh({ plant: this._plant, scene: this._scene });
 
   }
 

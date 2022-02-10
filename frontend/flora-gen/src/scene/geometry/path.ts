@@ -7,14 +7,15 @@ export default class Path extends Array<Vector3>{ };
 
 export type integer = number;
 
-export function smooth_path(path: Path, factor: number = 0.75, iterations: integer = 5): Path {
+export function smoothPath({ path, factor = 0.75, iterations = 5 }: { path: Path; factor?: number; iterations?: integer; }): Path {
     while (iterations >= 0) {
-        path = subdivide(path, factor);
+        path = subdivide({ path, factor });
         iterations--;
     }
     return path;
 }
-function subdivide(path: Path, factor: number): Path {
+
+function subdivide({ path, factor }: { path: Path; factor: number; }): Path {
     const output = new Path();
     if (path.length > 0) { output.push(path[0]) }
     for (const i in path) {
