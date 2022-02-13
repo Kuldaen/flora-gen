@@ -11,7 +11,7 @@ export class PlantNode {
     private debug: Dictionary<Mesh> = {};
     private scene: Scene;
     private debugMaterial: Material;
-    constructor(metamer: Metamer, basePos: Vector3, scene: Scene) {
+    constructor(metamer: Metamer, scene: Scene) {
         this.metamer = metamer;
         this.scene = scene;
         this._createDebugMeshes();
