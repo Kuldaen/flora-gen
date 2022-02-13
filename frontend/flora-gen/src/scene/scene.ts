@@ -9,7 +9,7 @@ import {
   DirectionalLight,
 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
-import { createPlant, Plant } from "./plants/plants";
+import { createPlant, Plant } from "./plants/Plant";
 import { buildPlantMesh } from "./plantBuilder";
 
 class FloraApp {
@@ -63,6 +63,7 @@ class FloraApp {
 
     const ground = MeshBuilder.CreateGround("ground", { width: 100, height: 100 }, this._scene)
     ground.material = groundMat;
+    ground.position.y = -0.01;
 
     const light = new DirectionalLight("light", new Vector3(-0.2, -1.0, -0.2), this._scene);
     light.intensity = 2;
