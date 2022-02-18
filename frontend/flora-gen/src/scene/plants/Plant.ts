@@ -1,15 +1,19 @@
-import { Vector3 } from "@babylonjs/core";
-import { HeadingFrame } from "./HeadingFrame";
 import { Metamer } from "./Metamer";
 
 export class Plant {
-    public root: Metamer = new Metamer({position: Vector3.Zero(), frame: new HeadingFrame() });
+    public root: Metamer = new Metamer();
 }
 
 export function createPlant(): Plant {
     const plant = new Plant();
-    const segment2 = new Metamer(plant.root.getTipEndpoint());
-    segment2.angleTheta = Math.PI / 4;
-    plant.root.successor = segment2;
+    const segment2 = new Metamer();
+    segment2.angleTheta = Math.PI / 8;
+    segment2.anglePhi = Math.PI / 2;
+    const segment3 = new Metamer();
+    segment3.angleTheta = Math.PI / 8;
+    segment3.anglePhi = Math.PI / 2;
+    segment2.setSucessor(segment3)
+    plant.root.setSucessor(segment2);
+    plant.root.propagateChanges();
     return plant;
 }

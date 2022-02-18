@@ -1,5 +1,4 @@
-import { MeshBuilder, Scene, Vector3 } from "@babylonjs/core";
-import { Lines } from "react-babylonjs";
+import { float, Matrix, Quaternion, Vector3 } from "@babylonjs/core";
 
 export class HeadingFrame {
     // frame of meta growth left-handed X=heading Y=up
@@ -15,5 +14,25 @@ export class HeadingFrame {
         this.heading = H;
         this.left = L;
         this.up = U;
+    }
+
+    public getTransform() {
+       const matrix = new Matrix();
+       Matrix.FromXYZAxesToRef(this.up, this.heading, this.left, matrix);
+       return matrix;
+    }
+
+    public applyRotation(angleTheta: float, anglePhi: float) {
+        const rotation = Quaternion.RotationAxis(this.up, angleTheta).multiply(
+            Quaternion.RotationAxis(this.heading, anglePhi)
+        );
+        const H = this.heading.clone();
+        const L = this.left.clone();
+        const U = this.up.clone();
+
+        this.heading.rotateByQuaternionToRef(rotation, H);
+        this.left.rotateByQuaternionToRef(rotation, L);
+        this.up.rotateByQuaternionToRef(rotation, U);
+        return new HeadingFrame(H, L, U);
     }
 }

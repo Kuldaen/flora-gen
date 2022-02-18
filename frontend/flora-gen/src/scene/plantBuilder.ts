@@ -11,6 +11,7 @@ export function buildPlantMesh({ plant, scene }: { plant: Plant; scene: Scene; }
         nodes.push(new PlantNode(current, scene));
         current = current.successor;
     }
+    console.log(nodes);
     return nodes;
 }
 
