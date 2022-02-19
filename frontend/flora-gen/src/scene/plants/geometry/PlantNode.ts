@@ -66,10 +66,11 @@ export class PlantNode {
     );
     this.debug["internode"] = internode;
 
+    const axisLength = this.metamer.radius * 2;
     const lines = [
-      [Vector3.Zero(), basePos.frame.heading.scale(this.metamer.length)],
-      [Vector3.Zero(), basePos.frame.left.scale(this.metamer.length)],
-      [Vector3.Zero(), basePos.frame.up.scale(this.metamer.length)],
+      [Vector3.Zero(), basePos.frame.heading.scale(axisLength)],
+      [Vector3.Zero(), basePos.frame.left.scale(axisLength)],
+      [Vector3.Zero(), basePos.frame.up.scale(axisLength)],
     ];
     const colours = [
       [new Color4(0, 0, 1, 1), new Color4(0, 0, 1, 1)],
