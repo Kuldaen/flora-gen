@@ -5,7 +5,6 @@ import {
   Scene,
   Vector3,
   StandardMaterial,
-  Material,
   Quaternion,
 } from "@babylonjs/core";
 import { Metamer } from "../Metamer";
@@ -19,15 +18,19 @@ export class PlantNode {
 
   private debug: Dictionary<Mesh> = {};
   private scene: Scene;
-  private debugMaterial: Material;
+
   constructor(metamer: Metamer, scene: Scene) {
     this.metamer = metamer;
     this.scene = scene;
     this._createDebugMeshes();
-    this.debugMaterial = new StandardMaterial("debug", this.scene);
-    this.debugMaterial.wireframe = true;
   }
 
+  private _createDebugMaterial() {
+    const material = new StandardMaterial("debug", this.scene);
+    material.wireframe = true;
+    material.alpha = 0.5;
+    return material;
+  }
   private _createDebugMeshes() {
     const base = MeshBuilder.CreateBox(
       "base",
@@ -36,8 +39,7 @@ export class PlantNode {
     );
     const basePos = this.metamer.getBaseEndpoint();
     base.position = basePos.position;
-    base.material = new StandardMaterial("debug", this.scene);
-    base.material.wireframe = true;
+    base.material = this._createDebugMaterial();
     this.debug["base"] = base;
 
     const capsuleLength = this.metamer.length;
@@ -46,15 +48,13 @@ export class PlantNode {
       {
         radius: this.metamer.radius,
         height: capsuleLength,
-        subdivisions: 12,
+        subdivisions: 4,
         capSubdivisions: 1,
-        topCapSubdivisions: 6,
+        topCapSubdivisions: 4,
         tessellation: 8,
       },
       this.scene
     );
-    internode.material = new StandardMaterial("debug", this.scene);
-    internode.material.wireframe = true;
     const transform = basePos.frame.getTransform();
     transform.setTranslation(basePos.position);
     internode.position = Vector3.TransformCoordinates(
@@ -64,6 +64,7 @@ export class PlantNode {
     internode.rotationQuaternion = Quaternion.FromRotationMatrix(
       transform.getRotationMatrix()
     );
+    internode.material = this._createDebugMaterial();
     this.debug["internode"] = internode;
 
     const axisLength = this.metamer.radius * 2;
