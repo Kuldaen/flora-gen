@@ -26,13 +26,11 @@ export class HeadingFrame {
     const rotation = Quaternion.RotationAxis(this.up, angleTheta).multiply(
       Quaternion.RotationAxis(this.heading, anglePhi)
     );
-    const H = this.heading.clone();
-    const L = this.left.clone();
-    const U = this.up.clone();
 
-    this.heading.rotateByQuaternionToRef(rotation, H);
-    this.left.rotateByQuaternionToRef(rotation, L);
-    this.up.rotateByQuaternionToRef(rotation, U);
+    const H = this.heading.rotateByQuaternionToRef(rotation, new Vector3());
+    const L = this.left.rotateByQuaternionToRef(rotation, new Vector3());
+    const U = this.up.rotateByQuaternionToRef(rotation, new Vector3());
+    
     return new HeadingFrame(H, L, U);
   }
 }

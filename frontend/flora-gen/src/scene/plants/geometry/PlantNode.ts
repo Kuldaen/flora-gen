@@ -14,6 +14,7 @@ interface Dictionary<T> {
 }
 
 export class PlantNode {
+
   private metamer: Metamer;
 
   private debug: Dictionary<Mesh> = {};
@@ -31,6 +32,7 @@ export class PlantNode {
     material.alpha = 0.5;
     return material;
   }
+
   private _createDebugMeshes() {
     const base = MeshBuilder.CreateBox(
       "base",
@@ -55,6 +57,7 @@ export class PlantNode {
       },
       this.scene
     );
+
     const transform = basePos.frame.getTransform();
     transform.setTranslation(basePos.position);
     internode.position = Vector3.TransformCoordinates(
