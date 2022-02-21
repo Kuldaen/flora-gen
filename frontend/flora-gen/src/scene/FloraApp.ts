@@ -11,12 +11,19 @@ import {
 import { SceneEventArgs } from "react-babylonjs";
 import { createPlant, Plant } from "./plants/Plant";
 import { buildPlantMesh } from "./plantBuilder";
+import { CreateUI } from "./ui/CreateUI";
+import { PlantNode } from "./plants/geometry/PlantNode";
 
-class FloraApp {
+export class FloraApp {
   private _scene: Scene;
   private _canvas: HTMLCanvasElement;
   private _camera: ArcRotateCamera;
   private _plant: Plant;
+  private _plantNodes: Array<PlantNode> = [];
+
+  get scene(): Scene {
+    return this._scene;
+  }
 
   constructor(canvas: HTMLCanvasElement, scene: Scene) {
     this._canvas = canvas;
@@ -27,7 +34,7 @@ class FloraApp {
     this._camera = this.createCamera();
     this.createScene();
 
-    this.run()
+    this.run();
   }
 
   private run() {
@@ -40,9 +47,13 @@ class FloraApp {
 
   private createCamera() {
     const camera = new ArcRotateCamera(
-      "Camera", 0, Math.PI / 4, 1, Vector3.Zero(),
+      "Camera",
+      0,
+      Math.PI / 4,
+      1,
+      Vector3.Zero(),
       this._scene
-    )
+    );
     camera.panningSensibility = 0;
     camera.allowUpsideDown = false;
     camera.lowerRadiusLimit = 0.1;
@@ -52,7 +63,7 @@ class FloraApp {
     camera.useNaturalPinchZoom = true;
     camera.maxZ = 100;
     camera.minZ = 0.001;
-    camera.attachControl(this._canvas, true)
+    camera.attachControl(this._canvas, true);
     return camera;
   }
 
@@ -61,22 +72,33 @@ class FloraApp {
     groundMat.diffuseColor = new Color3(0, 0.1, 0);
     groundMat.specularColor = new Color3(0.2, 0.2, 0.2);
 
-    const ground = MeshBuilder.CreateGround("ground", { width: 100, height: 100 }, this._scene)
+    const ground = MeshBuilder.CreateGround(
+      "ground",
+      { width: 100, height: 100 },
+      this._scene
+    );
     ground.material = groundMat;
     ground.position.y = -0.01;
 
-    const light = new DirectionalLight("light", new Vector3(-0.2, -1.0, -0.2), this._scene);
-    light.intensity = 2;
+    const light = new DirectionalLight(
+      "light",
+      new Vector3(-0.2, -1.0, -0.2),
+      this._scene
+    );
+    light.intensity = 1;
 
     this._scene.ambientColor = new Color3(0.5, 0.5, 0.5);
 
-    buildPlantMesh({ plant: this._plant, scene: this._scene });
+    this._plantNodes = buildPlantMesh(this._plant, this._scene);
 
+    CreateUI(this);
   }
 
-};
+  public setCameraTarget() {
+    this._camera.setTarget(new Vector3(0, 0.05, 0));
+  }
+}
 
 export function createFloraApp({ canvas, scene }: SceneEventArgs) {
   return new FloraApp(canvas, scene);
 }
-

@@ -3,13 +3,7 @@ import { Plant } from "./plants/Plant";
 import { Metamer } from "./plants/Metamer";
 import { PlantNode } from "./plants/geometry/PlantNode";
 
-export function buildPlantMesh({
-  plant,
-  scene,
-}: {
-  plant: Plant;
-  scene: Scene;
-}) {
+export function buildPlantMesh(plant: Plant, scene: Scene): PlantNode[] {
   let current: Nullable<Metamer> = plant.root;
   const nodes = [];
   while (current) {

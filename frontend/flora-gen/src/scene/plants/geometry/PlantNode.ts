@@ -1,4 +1,5 @@
 import {
+  Color3,
   Color4,
   Mesh,
   MeshBuilder,
@@ -14,7 +15,6 @@ interface Dictionary<T> {
 }
 
 export class PlantNode {
-
   private metamer: Metamer;
 
   private debug: Dictionary<Mesh> = {};
@@ -29,7 +29,7 @@ export class PlantNode {
   private _createDebugMaterial() {
     const material = new StandardMaterial("debug", this.scene);
     material.wireframe = true;
-    material.alpha = 0.5;
+    material.ambientColor = new Color3(0.5, 0.7, 0.5);
     return material;
   }
 
