@@ -1,4 +1,4 @@
-import { EventState, Vector2 } from "@babylonjs/core";
+import { EventState } from "@babylonjs/core";
 import {
   AdvancedDynamicTexture,
   Button,
@@ -51,15 +51,25 @@ export function CreateUI(app: FloraApp) {
     app.scene
   );
   advancedTexture.idealWidth = IDEAL_CANVAS_WIDTH;
-  const button1 = createButton({
+  advancedTexture.addControl(createButton({
     name: "up",
-    text: "^",
-    pos: { x: 10, y: 50 },
+    text: "↑",
+    pos: { x: 10, y: 60 },
     width_px: 50,
     onPointerUp: function () {
-      app.setCameraTarget();
+      app.setCameraTargetUp();
     },
-  });
+  }));
 
-  advancedTexture.addControl(button1);
+  advancedTexture.addControl(
+  createButton({
+    name: "down",
+    text: "↓",
+    pos: { x: 10, y: 100 },
+    width_px: 50,
+    onPointerUp: function () {
+      app.setCameraTargetDown();
+    },
+  }));
+
 }

@@ -20,6 +20,7 @@ export class FloraApp {
   private _camera: ArcRotateCamera;
   private _plant: Plant;
   private _plantNodes: Array<PlantNode> = [];
+  private _cameraTargetNode: number = 0;
 
   get scene(): Scene {
     return this._scene;
@@ -91,11 +92,31 @@ export class FloraApp {
 
     this._plantNodes = buildPlantMesh(this._plant, this._scene);
 
+    this.updateCameraTarget();
     CreateUI(this);
   }
 
-  public setCameraTarget() {
-    this._camera.setTarget(new Vector3(0, 0.05, 0));
+  private updateCameraTarget() {
+    const node = this._plantNodes.at(this._cameraTargetNode);
+    if (node) {
+      const newPos = this._camera.position.subtract(this._camera.target);
+      this._camera.setTarget(node.position);
+      this._camera.setPosition(node.position.add(newPos));
+    }
+  }
+
+  public setCameraTargetUp() {
+    if(this._cameraTargetNode < this._plantNodes.length-1){
+      this._cameraTargetNode += 1;
+    }
+    this.updateCameraTarget();
+  }
+
+  public setCameraTargetDown() {
+    if(this._cameraTargetNode > 0){
+      this._cameraTargetNode -= 1;
+    }
+    this.updateCameraTarget();
   }
 }
 

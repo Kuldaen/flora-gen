@@ -26,6 +26,10 @@ export class PlantNode {
     this._createDebugMeshes();
   }
 
+  get position(){
+    return this.metamer.getBaseEndpoint().position;
+  }
+  
   private _createDebugMaterial() {
     const material = new StandardMaterial("debug", this.scene);
     material.wireframe = true;
