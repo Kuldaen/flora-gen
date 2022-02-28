@@ -1,9 +1,9 @@
 import { Nullable, Scene } from "@babylonjs/core";
-import { Plant } from "./plants/Plant";
-import { Metamer } from "./plants/Metamer";
-import { PlantNode } from "./plants/geometry/PlantNode";
+import { Plant } from "../structure/Plant";
+import { Metamer } from "../structure/Metamer";
+import { PlantNode } from "./PlantNode";
 
-export function buildPlantMesh(plant: Plant, scene: Scene): PlantNode[] {
+export function BuildPlantVisuals(plant: Plant, scene: Scene): PlantNode[] {
   let current: Nullable<Metamer> = plant.root;
   const nodes = [];
   while (current) {

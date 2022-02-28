@@ -1,12 +1,9 @@
 import { MeshBuilder, Scene, Vector3 } from "@babylonjs/core";
 import Path, { smoothPath } from "./geometry/path";
-import { Plant } from "./plants/Plant";
 
 function buildTestTubeMesh({
-  plant,
   scene,
 }: {
-  plant: Plant;
   scene: Scene;
 }): void {
   const path = new Path(

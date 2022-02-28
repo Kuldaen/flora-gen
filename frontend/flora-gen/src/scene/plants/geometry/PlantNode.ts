@@ -8,7 +8,7 @@ import {
   StandardMaterial,
   Quaternion,
 } from "@babylonjs/core";
-import { Metamer } from "../Metamer";
+import { Metamer } from "../structure/Metamer";
 
 interface Dictionary<T> {
   [Key: string]: T;

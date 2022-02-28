@@ -9,10 +9,12 @@ import {
   DirectionalLight,
 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
-import { createPlant, Plant } from "./plants/Plant";
-import { buildPlantMesh } from "./plantBuilder";
+
+import { createPlant, Plant } from "./structure/Plant";
+import { BuildPlantVisuals } from "./geometry/BuildPlantVisuals";
+import { PlantNode } from "./geometry/PlantNode";
+
 import { CreateUI } from "./ui/CreateUI";
-import { PlantNode } from "./plants/geometry/PlantNode";
 
 export class FloraApp {
   private _scene: Scene;
@@ -90,7 +92,7 @@ export class FloraApp {
 
     this._scene.ambientColor = new Color3(0.5, 0.5, 0.5);
 
-    this._plantNodes = buildPlantMesh(this._plant, this._scene);
+    this._plantNodes = BuildPlantVisuals(this._plant, this._scene);
 
     this.updateCameraTarget();
     CreateUI(this);
