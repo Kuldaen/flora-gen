@@ -14,7 +14,7 @@ interface Dictionary<T> {
   [Key: string]: T;
 }
 
-export class PlantNode {
+export class MetamerMesh {
   private metamer: Metamer;
 
   private debug: Dictionary<Mesh> = {};

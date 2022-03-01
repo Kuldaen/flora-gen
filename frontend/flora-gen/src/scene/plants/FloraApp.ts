@@ -12,7 +12,7 @@ import { SceneEventArgs } from "react-babylonjs";
 
 import { createPlant, Plant } from "./structure/Plant";
 import { BuildPlantVisuals } from "./geometry/BuildPlantVisuals";
-import { PlantNode } from "./geometry/PlantNode";
+import { MetamerMesh } from "./geometry/MetamerMesh";
 
 import { CreateUI } from "./ui/CreateUI";
 
@@ -21,7 +21,7 @@ export class FloraApp {
   private _canvas: HTMLCanvasElement;
   private _camera: ArcRotateCamera;
   private _plant: Plant;
-  private _plantNodes: Array<PlantNode> = [];
+  private _plantNodes: Array<MetamerMesh> = [];
   private _cameraTargetNode: number = 0;
 
   get scene(): Scene {
