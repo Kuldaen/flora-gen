@@ -3,7 +3,6 @@ import {
   Scene,
   Color3,
   Vector3,
-  MeshBuilder,
   ArcRotateCamera,
   DirectionalLight,
 } from "@babylonjs/core";

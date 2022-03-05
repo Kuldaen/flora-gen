@@ -1,9 +1,6 @@
 import {
   Mesh,
-  MeshBuilder,
   Scene,
-  Vector3,
-  VertexBuffer,
 } from "@babylonjs/core";
 import { Line2D, UpdateLine2D} from "../../utils/Line2D";
 import { Leaf, Vein } from "../structure/Leaf";
