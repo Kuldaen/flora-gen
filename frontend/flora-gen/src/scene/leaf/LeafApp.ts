@@ -10,6 +10,8 @@ import { SceneEventArgs } from "react-babylonjs";
 import { Leaf } from "./structure/Leaf";
 import { LeafMesh } from "./geometry/LeafMesh";
 
+import { PeerConnection } from "../../comms/PeerConnection";
+
 export class LeafApp {
   private _scene: Scene;
   private _canvas: HTMLCanvasElement;
@@ -18,7 +20,9 @@ export class LeafApp {
 
   private _leaf: Leaf;
   private _leaf_mesh: LeafMesh;
-  
+
+  private _connection: PeerConnection;
+
   get scene(): Scene {
     return this._scene;
   }
@@ -30,6 +34,12 @@ export class LeafApp {
     this._camera = this.createCamera();
     this._leaf = new Leaf();
     this._leaf_mesh = new LeafMesh(this._leaf, this._scene);
+
+    this._connection = new PeerConnection({
+      drawTexture: (texture: Buffer) => {
+        console.log("draw",texture);
+      },
+    });
 
     this.createScene();
 
@@ -76,23 +86,22 @@ export class LeafApp {
 
     this._scene.ambientColor = new Color3(0.5, 0.5, 0.5);
 
-
-  //   const edge = [
-  //     Vector3.Zero(),
-  //     new Vector3(-0.05, 0.1, 0.0),
-  //     new Vector3(-0.02, 0.2, 0.0),
-  //     new Vector3(0.1, 0.3, 0.0),
-  //     new Vector3(0.2, 0.2, 0.0),
-  //     new Vector3(0.5, 0.1, 0.0),
-  //   ];
-  //   edge.push(edge[0]);
-  //   const sphere = MeshBuilder.CreateSphere("sphere", { diameter: 0.01 });
-  //   sphere.position = edge[0];
-  //   for (var p = 1; p < edge.length; p++) {
-  //     const point = sphere.createInstance("");
-  //     point.position = edge[p];
-  //   }
-  //   const lines = MeshBuilder.CreateLines("edge", { points: edge });
+    //   const edge = [
+    //     Vector3.Zero(),
+    //     new Vector3(-0.05, 0.1, 0.0),
+    //     new Vector3(-0.02, 0.2, 0.0),
+    //     new Vector3(0.1, 0.3, 0.0),
+    //     new Vector3(0.2, 0.2, 0.0),
+    //     new Vector3(0.5, 0.1, 0.0),
+    //   ];
+    //   edge.push(edge[0]);
+    //   const sphere = MeshBuilder.CreateSphere("sphere", { diameter: 0.01 });
+    //   sphere.position = edge[0];
+    //   for (var p = 1; p < edge.length; p++) {
+    //     const point = sphere.createInstance("");
+    //     point.position = edge[p];
+    //   }
+    //   const lines = MeshBuilder.CreateLines("edge", { points: edge });
   }
 }
 

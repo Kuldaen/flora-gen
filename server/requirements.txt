@@ -1,0 +1,5 @@
+asyncio
+aiohttp
+aiohttp_cors
+python-socketio
+msgpack
